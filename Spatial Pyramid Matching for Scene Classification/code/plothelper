@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb  6 11:55:30 2019
+
+@author: usoysal
+"""
+
+import numpy as np
+import torchvision
+import util
+import matplotlib.pyplot as plt
+#import matplotlib 
+#matplotlib.use('TkAgg')
+
+import visual_words
+import visual_recog
+import skimage.io
+
+if __name__ == '__main__':
+
+    num_cores = util.get_num_CPU()
+
+    path_img = "../data/aquarium/sun_aztvjgubyrgvirup.jpg"
+    image = skimage.io.imread(path_img)
+    image = image.astype('float')/255
+    filter_responses = visual_words.extract_filter_responses(image)
+    #util.display_filter_responses(filter_responses)
+
+    # Run this if there is no dictionary on the directory.
+    #visual_words.compute_dictionary(num_workers=num_cores)
+    
+    dictionary = np.load('dictionary.npy')
+    img = visual_words.get_visual_words(image,dictionary)
+   
+    # For only visulaziation purpose
+    path_img = "../data/aquarium/sun_abkmoyxralulvhzi.jpg"
+    image = skimage.io.imread(path_img)
+    image = image.astype('float')/255
+    img = visual_words.get_visual_words(image,dictionary)
+    plt.imshow(img)
+    plt.savefig("sun_abkmoyxralulvhzi")
+    
+    List=["aquarium/sun_aaqwqkwglsmkulks",
+          "aquarium/sun_abjhcwfgisiwsrcz",
+          "aquarium/sun_abkmoyxralulvhzi",
+          "desert/sun_afferxhafrjnpuri",         
+          "desert/sun_afferxhafrjnpuri",
+          "desert/sun_afnezlyrmmdropae",
+          "highway/sun_aplbvhcpjbtckekp", 
+    "highway/sun_adaebhgozgdowgng",
+    "highway/sun_ahzbishmbqbogwvn",
+    "kitchen/sun_aisasvgawrizoqco",
+    "kitchen/sun_aasmevtpkslccptd",
+    "kitchen/sun_abujclohwuaugvev"
+    "laundromat/sun_adjgnpenryftfwsr", 
+    "laundromat/sun_aalvewxltowiudlw",
+    "laundromat/sun_ajlutobdnqdwbigs", 
+    "park/labelme_arzwginlqrfnzvf",
+    "park/labelme_fzfkkjbyygrtdij",
+    "park/labelme_xptgcurxpnetbfr", 
+    "waterfall/sun_ablsxpxovlmoqxjy",
+    "waterfall/sun_adgraqjkdvtsdonf",
+    "waterfall/sun_aecgdxztcovcpyvx",
+    "windmill/sun_ajbmlzwcgcjkjgbd",
+    "windmill/sun_baksavqjcngbamjm",
+    "windmill/sun_bfedwvnzmzbtmlny"]
+    
+    
+    for i in List:
+        path_img = "../data/"+i+".jpg"
+        image = skimage.io.imread(path_img)
+        image = image.astype('float')/255
+        img = visual_words.get_visual_words(image,dictionary)
+        plt.imshow(image)
+        plt.savefig(i)
+        plt.imshow(img)
+        plt.savefig("wordmap_"+i)
+        
+    
+    #util.save_wordmap(wordmap, filename)
+    #visual_recog.build_recognition_system(num_workers=num_cores)
+
+    #conf, accuracy = visual_recog.evaluate_recognition_system(num_workers=num_cores)
+    #print(conf)
+    #print(np.diag(conf).sum()/conf.sum())
+
